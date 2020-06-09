@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Solution {
+public:
+    int kadane(vector<int>& A)
+    {
+        int max = 0;
+        int result = INT_MIN;
+        for(int i = 0; i<A.size(); i++)
+        {
+            max = max + A[i];
+            if(result < max){
+                result = max;
+                }
+            if( max < 0 ){
+                    max = 0;
+            }
+        }
+        return result;
+    }
+    int maxSubarraySumCircular(vector<int>& A) {
+        int result = kadane(A);
+        int max_wrap = 0, i;  
+        for (i = 0; i < A.size(); i++)  
+        {  
+            max_wrap += A[i];   
+            A[i] = -A[i];   
+        }
+        max_wrap = max_wrap + kadane(A);
+        return (max_wrap > result && max_wrap != 0)? max_wrap: result;  
+    }
+};

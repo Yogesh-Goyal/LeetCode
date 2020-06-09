@@ -1,0 +1,79 @@
+class Solution {
+public:
+    int arr[50][50] = {0};
+    int pc;
+    void flood(int sr, int sc, int newColor, bool visit[][50], int row, int col ) {
+        if( visit[sr][sc] == true)
+        {
+            return;
+        }
+        visit[sr][sc] = true;
+        if( sr-1 >= 0)
+        {
+            if( arr[sr-1][sc] == pc )
+            {
+                flood( sr-1, sc, newColor, visit, row, col );
+                arr[sr-1][sc] = newColor;
+            }
+        }
+        if( sc-1 >= 0)
+        {
+            if( arr[sr][sc-1] == pc )
+            {
+                flood( sr, sc-1, newColor, visit, row, col );
+                arr[sr][sc-1] = newColor;
+            }
+        }
+        if( sr + 1 < row)
+        {
+            if( arr[sr+1][sc] == pc )
+            {
+                flood( sr+1, sc, newColor, visit, row, col );
+                arr[sr+1][sc] = newColor;
+            }
+        }
+        if( sc+1 < col)
+        {
+            if( arr[sr][sc+1] == pc )
+            {
+                flood( sr, sc+1, newColor, visit, row, col );
+                arr[sr][sc+1] = newColor;
+            }
+        }
+        arr[sr][sc] = newColor;
+        return;
+    }
+    
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        bool visit[50][50];
+        pc = image[sr][sc];
+        for(int i = 0; i<image.size(); i++ )
+        {
+            for(int j = 0; j < image[i].size(); j++)
+            {
+                arr[i][j] = image[i][j];
+            }
+        }
+        for(int i = 0; i < 50; i++ )
+        {
+            for(int j = 0; j < 50; j++)
+            {
+                visit[i][j] = false;
+            }
+        }
+        int size1 = image.size();
+        int size2 = image[0].size();
+        flood(sr, sc, newColor, visit, size1, size2);
+        vector< vector<int> > result;
+        for(int i = 0; i<image.size(); i++ )
+        {
+            vector<int> kl;
+            for(int j = 0; j < image[i].size(); j++)
+            {
+                kl.push_back( arr[i][j] );
+            }
+            result.push_back(kl);
+        }
+        return result;
+    }
+};

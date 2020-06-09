@@ -1,0 +1,55 @@
+#include <iostream> 
+#include <utility> 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    pair<int,int> findit(TreeNode* node, int x, int h,TreeNode* prev)
+    { 
+        if(node == NULL)
+        {
+            pair<int,int> p1;
+            p1.first = -1;
+            p1.second = -1;
+            return p1;
+        }
+        if(node->val == x)
+        {
+                pair<int,int> p1;
+                p1.first = prev->val;
+                p1.second = h;
+                return p1;
+        }
+        pair<int,int> p2,p3;
+        prev = node;
+        p2 = findit(node->left,x,h+1,prev);
+        p3 = findit(node->right,x,h+1,prev);
+        if(p2.second != -1)
+        {
+            return p2;
+        }
+            return p3;
+         
+    }
+    
+    bool isCousins(TreeNode* root, int x, int y) {
+        TreeNode* prev = new TreeNode(-1);
+        pair<int,int> t1 = findit(root,x,0,prev);
+        pair<int,int> t2 = findit(root,y,0,prev);
+       // cout<<t1.first<<" "<<t1.second<<endl;
+       // cout<<t2.first<<" "<<t2.second<<endl;
+        if(t1.second == t2.second && t1.first != t2.first)
+            return true;
+        else
+            return false;
+    }
+};

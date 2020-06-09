@@ -1,0 +1,14 @@
+#include<math.h>
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        int kl = pow( num, 0.5);
+       // cout<<kl<<endl;
+        int pk = pow( kl, 2);
+       // cout<<pk<<endl;
+        if(pk == num)
+            return true;
+        else
+            return false;
+    }
+};

@@ -1,0 +1,41 @@
+#include<vector>
+#include <utility> 
+class StockSpanner {
+public:
+    vector< pair<int,int> > vec;
+    int index;
+    StockSpanner() {
+        index = -1;
+    }
+    
+    int next(int price) {
+        index++;
+        pair<int,int> p1;
+        p1.first = index;
+        p1.second = price;    
+        int temp = 0;
+        if( vec.size() == 0 ){
+            temp = 1;
+        }
+        else{
+            pair<int,int> p2 = vec.back();
+            while(price >= p2.second && vec.size() != 0 ){
+                vec.pop_back();
+                if(vec.size() > 0)
+                    p2 = vec.back();
+                }
+                if( vec.size() == 0 )
+                        temp = index+1;
+                else
+                    temp = index - p2.first ;
+        }
+        vec.push_back(p1);
+        return temp;
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj->next(price);
+ */

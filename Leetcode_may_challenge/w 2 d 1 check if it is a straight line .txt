@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool checkStraightLine(vector<vector<int>>& coordinates) {
+        if(coordinates.size() == 1 || coordinates.size() == 2)
+            return true;
+        vector<int> t1 = coordinates[0];
+        float p1 = t1[0];
+        float p2 = t1[1];
+        vector<int> t2 = coordinates[1];
+        float p11 = t2[0];
+        float p12 = t2[1];
+        float slope = ( p2 -p12 ) / (p1 - p11) ;
+        //cout<<slope<<endl;
+        for(int i = 2; i<coordinates.size(); i++)
+        {
+            vector<int> t = coordinates[i];
+            float t11 = t[0];
+            float t12 = t[1];
+            float temp = (p2 - t12) / (p1 - t11)  ;
+            
+           // cout<<temp<<endl;
+            if(temp != slope)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};

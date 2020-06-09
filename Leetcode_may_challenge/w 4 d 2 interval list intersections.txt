@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Solution {
+public:
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& A, vector<vector<int>>& B) {
+        vector< vector<int> > result;
+        if(A.size() == 0 || B.size() == 0){
+            return result;    
+        }   
+        int a1,a2,b1,b2;
+        a2 = b2 = -1;
+        int j = 0,i = 0;
+        while(i < A.size() ){
+            if(j >= B.size() ){
+                break;
+            }
+            vector<int> tem = A[i];
+            vector<int> tem1 = B[j];
+            a1 = tem[0];
+            b1 = tem1[0];
+            a2 = tem[1];
+            b2 = tem1[1];
+            if(a1 == b2){
+                vector<int> temp;
+                temp.push_back(a1);
+                temp.push_back(a1);
+                result.push_back(temp);
+                j += 1;
+            }
+            else if( b1 == a2){
+                vector<int> temp;
+                temp.push_back(a2);
+                temp.push_back(a2);
+                result.push_back(temp);
+                i += 1;
+            }
+            else{
+                int s1 = max(a1,b1);
+                int s2 = min(a2,b2);
+                if(s1 <= s2){
+                    vector<int> temp;
+                    temp.push_back(s1);
+                    temp.push_back(s2);
+                    result.push_back(temp);
+                }   
+                if(a2 > b2){
+                    j += 1;
+                }
+                else{
+                    i += 1;
+                }
+            }
+        }
+       /* if(j < B.size() ){
+            vector<int> tem1 = B[j];
+            b1 = tem1[0];
+            if( b1 == a2){
+                vector<int> temp;
+                temp.push_back(a2);
+                temp.push_back(a2);
+                result.push_back(temp);
+            }
+        }*/
+        return result;
+    }
+};
