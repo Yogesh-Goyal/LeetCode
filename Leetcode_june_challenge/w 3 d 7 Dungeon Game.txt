@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+#include<vector>
+class Solution {
+public:
+    
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int m = dungeon.size()-1;
+        int n = dungeon[0].size() - 1;
+        vector<vector<int> > result( m+1, vector<int>(n+1,0) );
+        result[m][n] = (dungeon[m][n] > 0) ? 1 : 1-dungeon[m][n];
+        for(int i = m; i >= 0; i--){
+            for(int j = n; j >= 0; j--){
+                if(i == m && j == n)
+                    continue;
+                if(i == m ){
+                    int tempreq = ( j != n) ? result[i][j+1] : 0;
+                    int x = max(tempreq - dungeon[i][j] , 1);
+                    result[i][j] = x;
+                }
+                else if( j == n){
+                    int tempreq = ( i != m) ? result[i+1][j] : 0;
+                    int x = max(tempreq - dungeon[i][j] , 1);
+                    result[i][j] = x;
+                }
+                else{
+                    result[i][j] = max(   min(result[i+1][j],result[i][j+1]) - dungeon[i][j] , 1);
+                    }
+                
+            }
+        }
+    return result[0][0];
+    }
+};
