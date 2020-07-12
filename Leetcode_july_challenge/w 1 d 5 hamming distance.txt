@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        int result = 0;
+        while(x > 0 && y > 0){
+            int first = x % 2;
+            int second = y % 2;
+            x = x/2;
+            y = y/2;
+            if(first != second)
+                result++;
+        }
+        while(x > 0){
+            int first = x % 2;
+            x = x/2;
+            if(first == 1)
+                result++;
+        }
+        while(y > 0){
+            int first = y % 2;
+            y = y/2;
+            if(first == 1)
+            result++;
+        }
+        return result;
+    }
+};
