@@ -1,0 +1,168 @@
+# method 1 ( recusion)
+class Solution {
+public:
+    bool findOut(float total, float totalB){
+        if(abs(total + totalB) == 24 || abs(total-totalB) == 24 || abs(total/totalB) == 24 || abs(totalB/total) == 24 || (total*totalB) == 24 )
+            return true;
+        return false;
+    }
+    bool findit(vector<int> &cards, int index, float total,vector<bool> &visited, int num, int n1 = -1,int n2 = -1){
+        if(round(total*100)/100 == 24 && num == 4){
+            return true;
+        }
+        if(num == 4)
+            return false;
+        visited[index] = true;
+
+        for(int i = 0; i < 4; i++){
+            if(!visited[i]){
+                if(
+                findit(cards,i,total + (float)cards[i],visited,num+1,index,i) ||
+                findit(cards,i,total - (float)cards[i],visited,num+1,index,i) ||
+                findit(cards,i,(float)cards[i]- total,visited,num+1,index,i) ||
+                findit(cards,i,total / (float)cards[i],visited,num+1,index,i) ||
+                findit(cards,i,(float)cards[i] / total,visited,num+1,index,i) || 
+                findit(cards,i,total * (float)cards[i],visited,num+1,index,i)
+                ){
+                return true;
+                }
+            }
+        }
+        visited[index] = false;
+        if(num == 1){
+            swap(cards[0],cards[index]);
+            visited[0] = true;
+            for(int i = 1; i < 4; i++){    
+                if(!visited[i]){
+                    if(
+                        findit(cards,i,(float)cards[0] + (float)cards[i],visited,2,0,i) ||
+                        findit(cards,i,(float)cards[0] - (float)cards[i],visited,2,0,i) ||
+                        findit(cards,i,(float)cards[i] - (float)cards[0],visited,2,0,i) ||
+                        findit(cards,i,(float)cards[0] / (float)cards[i],visited,2,0,i) ||
+                        findit(cards,i,(float)cards[i] / (float)cards[0],visited,2,0,i) ||
+                        findit(cards,i,(float)cards[0] * (float)cards[i],visited,2,0,i)
+                        ){
+                        return true;
+                    }
+                }
+            }
+            visited[0] = false;
+            swap(cards[0],cards[index]);
+        } 
+        if(num == 2){
+            // cout<<n1<<" "<<n2<<endl;
+            int index = -1, index2 = -1;
+            for(int i = 0; i < 4; i++){
+                if(n1 != i && n2 != i){
+                    if(index == -1)
+                        index = i;
+                    else
+                        index2 = i;
+                }
+            }
+            n1 = index;
+            n2 = index2;
+            visited[n1] = true;
+            if(
+                    findOut(total,(float)cards[n1] + (float)cards[n2]) ||
+                    findOut(total,(float)cards[n1] - (float)cards[n2]) ||
+                    findOut(total,(float)cards[n2] - (float)cards[n1]) ||
+                    findOut(total,(float)cards[n1] / (float)cards[n2]) ||
+                    findOut(total,(float)cards[n2] / (float)cards[n1]) ||
+                    findOut(total,(float)cards[n1] * (float)cards[n2]) 
+                ){
+                    return true;
+                }
+            
+            visited[n1] = false;
+        }        
+        return false;
+    }
+    bool judgePoint24(vector<int>& cards) {
+        vector<bool> visited(4,false);
+        return findit(cards,0,cards[0],visited,1,0,0) || 
+            findit(cards,1,cards[1],visited,1,1,1) ||
+            findit(cards,2,cards[2],visited,1,2,2) ||
+            findit(cards,3,cards[3],visited,1,3,3);
+    }
+};
+
+
+#method 2 ( generate all cases )
+class Solution {
+public:
+int judgePoint24_1(double a){
+    return a-24>-1e-6 && a-24<1e-6;
+}
+int judgePoint24_2(double a,double b){
+    return (judgePoint24_1(a+b)||
+            judgePoint24_1(a*b)||
+            judgePoint24_1(a-b)||
+            judgePoint24_1(b-a)||
+            judgePoint24_1(a/b)||
+            judgePoint24_1(b/a));
+}
+int judgePoint24_3(double a,double b,double c){
+    return (judgePoint24_2((b+c),a)||
+           judgePoint24_2((b*c),a)||
+           judgePoint24_2((b-c),a)||
+           judgePoint24_2((c-b),a)||
+           judgePoint24_2((b/c),a)||
+           judgePoint24_2((c/b),a)||
+           judgePoint24_2((a+c),b)||
+           judgePoint24_2((a*c),b)||
+           judgePoint24_2((a-c),b)||
+           judgePoint24_2((c-a),b)||
+           judgePoint24_2((a/c),b)||
+           judgePoint24_2((c/a),b)||
+           judgePoint24_2((a+b),c)||
+           judgePoint24_2((a*b),c)||
+           judgePoint24_2((a-b),c)||
+           judgePoint24_2((b-a),c)||
+           judgePoint24_2((a/b),c)||
+           judgePoint24_2((b/a),c));
+}
+int judgePoint24_4(double a,double b,double c,double d){
+    return 
+           (judgePoint24_3((c+d),a,b)||
+           judgePoint24_3((c*d),a,b)||
+           judgePoint24_3((c-d),a,b)||
+           judgePoint24_3((d-c),a,b)||
+           judgePoint24_3((c/d),a,b)||
+           judgePoint24_3((d/c),a,b)||
+           judgePoint24_3((b+d),a,c)||
+           judgePoint24_3((b*d),a,c)||
+           judgePoint24_3((b-d),a,c)||
+           judgePoint24_3((d-b),a,c)||
+           judgePoint24_3((b/d),a,c)||
+           judgePoint24_3((d/b),a,c)||
+           judgePoint24_3((b+c),a,d)||
+           judgePoint24_3((b*c),a,d)||
+           judgePoint24_3((b-c),a,d)||
+           judgePoint24_3((c-b),a,d)||
+           judgePoint24_3((b/c),a,d)||
+           judgePoint24_3((c/b),a,d)||
+           judgePoint24_3((a+d),b,c)||
+           judgePoint24_3((a*d),b,c)||
+           judgePoint24_3((a-d),b,c)||
+           judgePoint24_3((d-a),b,c)||
+           judgePoint24_3((a/d),b,c)||
+           judgePoint24_3((d/a),b,c)||
+           judgePoint24_3((a+c),b,d)||
+           judgePoint24_3((a*c),b,d)||
+           judgePoint24_3((a-c),b,d)||
+           judgePoint24_3((c-a),b,d)||
+           judgePoint24_3((a/c),b,d)||
+           judgePoint24_3((c/a),b,d)||
+           judgePoint24_3((a+b),c,d)||
+           judgePoint24_3((a*b),c,d)||
+           judgePoint24_3((a-b),c,d)||
+           judgePoint24_3((b-a),c,d)||
+           judgePoint24_3((a/b),c,d)||
+           judgePoint24_3((b/a),c,d));
+}
+    bool judgePoint24(vector<int>& nums) {
+        double a=nums[0],b=nums[1],c=nums[2],d=nums[3];
+        return judgePoint24_4(a,b,c,d);
+    }
+};
